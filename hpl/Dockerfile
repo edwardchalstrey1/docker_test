@@ -1,4 +1,5 @@
 # code from https://www.pugetsystems.com/labs/hpc/How-to-Run-an-Optimized-HPL-Linpack-Benchmark-on-AMD-Ryzen-Threadripper----2990WX-32-core-Performance-1291/
+# and https://www.howtoforge.com/tutorial/hpl-high-performance-linpack-benchmark-raspberry-pi/
 
 FROM ubuntu:18.04
 
@@ -7,42 +8,27 @@ RUN apt-get install build-essential emacs -y
 RUN apt-get install hwloc libhwloc-dev libevent-dev -y
 RUN apt-get install autoconf automake gfortran -y
 
-# RUN dpkg --configure -a
-# RUN apt install lam4-dev -f -y
-# RUN apt install limbpich-dev -y
 RUN apt install libopenmpi-dev -y
 RUN apt install openssh-server -y
 
-CMD mkdir ~/AMD-HPL
-CMD mkdir ~/projects
-CMD mkdir ~/projects/hpl-build
+RUN apt-get install libatlas-base-dev gfortran -y
 
-COPY openmpi-3.1.3.tar.gz /projects/hpl-build/openmpi-3.1.3.tar.gz
-COPY mpi-env.sh /AMD-HPL/mpi-env.sh
+# CMD mkdir ~/AMD-HPL
 
-CMD cd projects/hpl-build
+# The below compiles but doesnt run
+# COPY hello.c /hello.c
+# CMD mpicc hello.c -o hello
+# CMD mpirun --allow-run-as-root -np 4 hello
 
-CMD tar xf openmpi-3.1.3.tar.gz
-CMD cd openmpi-3.1.3/
+COPY hpl-2.2.tar.gz /hpl-2.2.tar.gz
+RUN tar xf hpl-2.2.tar.gz
+RUN mv hpl-2.2 hpl
 
-CMD CFLAGS="-Ofast -march=native" ./configure --prefix=$HOME/AMD-HPL
-#CMD make -j 32
-CMD make
-CMD make install
+COPY Make.ubuntu /hpl/Make.ubuntu
 
-CMD export MPI_HOME=$HOME/AMD-HPL/openmpi-3.1
-CMD export PATH=$PATH:$MPI_HOME/bin
-CMD export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MPI_HOME/lib
+COPY commands.sh /commands.sh
+COPY commands2.sh /commands2.sh
+COPY HPL.dat HPL.dat
 
-RUN /bin/bash -c "source AMD-HPL/mpi-env.sh"
-
-COPY hello.c /hello.c
-
-CMD cd ../../..
-
-# CMD ls
-# RUN mpicc hello.c -o hello
-# RUN mpirun -np 4 hello
-
-CMD mpicc hello.c -o hello
-CMD mpirun --allow-run-as-root -np 4 hello
+CMD bash commands.sh
+# CMD bash commands2.sh
