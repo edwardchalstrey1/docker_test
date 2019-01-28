@@ -1,4 +1,4 @@
-#  
+#
 #  -- High Performance Computing Linpack Benchmark (HPL)
 #     HPL - 2.2 - February 24, 2016
 #     Antoine P. Petitet
@@ -67,7 +67,7 @@ ARCH         = ubuntu
 # - HPL Directory Structure / HPL library ------------------------------
 # ----------------------------------------------------------------------
 #
-TOPdir       = $(HOME)/hpl
+TOPdir       = /hpl
 INCdir       = $(TOPdir)/include
 BINdir       = $(TOPdir)/bin/$(ARCH)
 LIBdir       = $(TOPdir)/lib/$(ARCH)

@@ -13,22 +13,16 @@ RUN apt install openssh-server -y
 
 RUN apt-get install libatlas-base-dev gfortran -y
 
-# CMD mkdir ~/AMD-HPL
-
-# The below compiles but doesnt run
-# COPY hello.c /hello.c
-# CMD mpicc hello.c -o hello
-# CMD mpirun --allow-run-as-root -np 4 hello
-
 COPY hpl-2.2.tar.gz /hpl-2.2.tar.gz
 RUN tar xf hpl-2.2.tar.gz
 RUN mv hpl-2.2 hpl
+# wget http://www.netlib.org/benchmark/hpl/hpl-2.2.tar.gz
 
 COPY Make.ubuntu /hpl/Make.ubuntu
+WORKDIR "/hpl"
+RUN make arch=ubuntu
+WORKDIR "/hpl/bin/ubuntu"
 
-COPY commands.sh /commands.sh
-COPY commands2.sh /commands2.sh
 COPY HPL.dat HPL.dat
 
-CMD bash commands.sh
-# CMD bash commands2.sh
+RUN ./xhpl
