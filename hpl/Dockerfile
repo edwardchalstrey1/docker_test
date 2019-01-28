@@ -25,4 +25,4 @@ WORKDIR "/hpl/bin/ubuntu"
 
 COPY HPL.dat HPL.dat
 
-RUN ./xhpl
+CMD ./xhpl
