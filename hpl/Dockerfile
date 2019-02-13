@@ -20,4 +20,5 @@ WORKDIR "/hpl/bin/ubuntu"
 
 COPY HPL.dat HPL.dat
 
+# CMD mpirun -np 4 --alow-run-as-root ./xhpl
 CMD ./xhpl
