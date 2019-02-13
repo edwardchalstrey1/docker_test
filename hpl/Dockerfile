@@ -10,9 +10,6 @@ COPY hpl-2.3.tar.gz /hpl-2.3.tar.gz
 RUN tar xf hpl-2.3.tar.gz
 RUN mv hpl-2.3 hpl
 
-# Problem with doing it this way is that netlib was down when I tried this once
-# wget http://www.netlib.org/benchmark/hpl/hpl-2.2.tar.gz
-
 COPY Make.ubuntu /hpl/Make.ubuntu
 WORKDIR "/hpl"
 RUN make arch=ubuntu
@@ -20,5 +17,4 @@ WORKDIR "/hpl/bin/ubuntu"
 
 COPY HPL.dat HPL.dat
 
-# CMD mpirun -np 4 --alow-run-as-root ./xhpl
-CMD ./xhpl
+CMD mpirun -np 4 --allow-run-as-root ./xhpl
